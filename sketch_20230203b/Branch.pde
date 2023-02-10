@@ -3,36 +3,69 @@ class Branch
   int xOrigin;
   int yOrigin;
   
+  int moveMode;
   int xPos;
   int yPos;
-  int size = 1;
+  int xDirection;
+  int yDirection;
+  int size;
   
+  int colourMode;
   int hue;
   int saturation;
-  int value;
+  int brightness;
+  int colourVariation;
   
-  Branch(int x, int y)
+  //float[] likelihoods;
+  
+  Branch(int x, int y, int c)
   {
     xOrigin = x;
     yOrigin = y;
+    
+    moveMode = 0;
     xPos = x;
     yPos = y;
-    ChooseColour();
+    size = 1;
+    
+    colourMode = 0;
+    hue = c;
+    saturation = c;
+    brightness = c;
+    colourVariation = 3;
   }
   
   void Update()
   {
-    ChoosePosition();
+    Move();
+    ChooseColour();
     Draw();
     DrawMirrored();
   }
   
-  void ChoosePosition()
+  void Move()
   {
-    ChooseRandomAdjacent();
+    if(Likelihood(0.001))
+    {
+      println("changeMode");
+      moveMode = int(random(2));
+      if(moveMode == 1)
+      {
+        NewDirection();
+      }
+    }
+    
+    if(moveMode == 0)
+    {
+      MoveRandomAdjacent();
+    }
+    else if(moveMode == 1)
+    {
+      MoveAlongLine();
+    }
   }
   
-  void ChooseRandomAdjacent()
+  void MoveRandomAdjacent()
   {
     int r = int(random(-2,2));
     xPos += r;
@@ -43,20 +76,57 @@ class Branch
     yPos = constrain(yPos,0,height);
   }
   
+  void NewDirection()
+  {
+    int r = int(random(-2,2));
+    xDirection = r;
+    
+    r = int(random(-2,2));
+    yDirection = r;
+  }
+  
+  void MoveAlongLine()
+  {
+    xPos += xDirection;
+    yPos += yDirection;
+  }
+  
   void ChooseColour()
   {
-    hue = int(random(256));
-    saturation = 100;
-    value = 255;
+    if(colourMode == 0)
+    {
+      VaryColour();
+    }
+  }
+  
+  void VaryColour()
+  {
+    hue += int(random(colourVariation*-1,colourVariation));
+    //hue = constrain(hue,0,255);
+    if(hue < 0)
+    {
+      hue += 255;
+    }
+    else if(hue > 255)
+    {
+      hue -= 255;
+    }
+    saturation += int(random(colourVariation*-1,colourVariation));
+    saturation = constrain(saturation,0,255);
+    brightness += int(random(colourVariation*-1,colourVariation));
+    brightness = constrain(brightness,0,255);
+        
+    println("hue = " + hue);
+    println("saturation = " + saturation);
+    println("brightness = " + brightness);
   }
   
   void Draw()
   {
     noStroke();
-    fill(hue,saturation,value);
+    fill(hue,saturation,brightness);
     ellipse(xPos,yPos,size,size);
   }
-  
   
   void DrawMirrored()
   {
@@ -93,6 +163,20 @@ class Branch
       ellipse(xFlippedGlobal2,yFlippedGlobal2,size,size);
       ellipse(xFlippedGlobal1,yFlippedGlobal2,size,size);
       ellipse(xFlippedGlobal2,yFlippedGlobal1,size,size);
+    }
+  }
+  
+  boolean Likelihood(float f)
+  {
+    float r = random(1);
+    println("r = " + r);
+    if(r >= 1 - f)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
     }
   }
 
