@@ -42,3 +42,22 @@ DONE
 - Constrained lines back to 45 degree intervals, looks better
 - Added likelihood weighting for different move modes
 - Branches have a chance to clone themselves
+
+---
+
+## Session 04
+
+Minutes: 60
+
+TODO
+- Add options for branches to die
+- If no branches, add new branch
+- Add curve move mode
+- Add colour stepped mode
+- Circles can be big sometimes
+
+DONE
+- Branches can die if at least one will remain
+- Curve move mode (need to change to rotation rather than decimals of position)
+
+---

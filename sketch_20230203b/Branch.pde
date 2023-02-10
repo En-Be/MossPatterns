@@ -1,13 +1,15 @@
 class Branch
 {
-  int xOrigin;
-  int yOrigin;
+  float xOrigin;
+  float yOrigin;
   
   int moveMode;
-  int xPos;
-  int yPos;
+  float xPos;
+  float yPos;
   float xDirection;
   float yDirection;
+  float xCurveDirection;
+  float yCurveDirection;
   
   int size;
   int sizeVariation;
@@ -20,7 +22,7 @@ class Branch
   
   //float[] likelihoods;
   
-  Branch(int x, int y, int h, int s, int b)
+  Branch(float x, float y, int h, int s, int b)
   {
     xOrigin = x;
     yOrigin = y;
@@ -28,6 +30,12 @@ class Branch
     moveMode = 0;
     xPos = x;
     yPos = y;
+    xDirection = 0;
+    yDirection = 0;
+    xCurveDirection = 0;
+    yCurveDirection = 0;
+    //NewCurveDirection(); //test
+
     size = 1;
     
     colourMode = 0;
@@ -40,6 +48,7 @@ class Branch
   void Update()
   {
     Move();
+    //MoveAlongCurve();
     ChooseSize();
     ChooseColour();
     Draw();
@@ -49,31 +58,45 @@ class Branch
   
   void Move()
   {
-    if(moveMode == 0)
+    if(moveMode == 0) // Random walk
     {
-      if(Likelihood(0.002))
+      if(Likelihood(0.001))
       {
         //println("changeMode");
-        moveMode = int(random(2));
+        moveMode = int(random(3));
       }
       else
       {
         MoveRandomAdjacent();
       }
     }
-    else if(moveMode == 1)
+    else if(moveMode == 1) // Straight lines
     {
       if(Likelihood(0.01))
       {
         //println("changeMode");
-        moveMode = int(random(2));
-        NewDirection();
+        moveMode = int(random(3));
+        NewLineDirection();
       }
       else
       {
         MoveAlongLine();
       }
     }
+    else if(moveMode == 2) // Curved lines
+    {
+      if(Likelihood(0.01))
+      {
+        //println("changeMode");
+        moveMode = int(random(3));
+        NewCurveDirection();
+      }
+      else
+      {
+        MoveAlongCurve();
+      }
+    }
+    println("move mode = " + moveMode);
   }
   
   void MoveRandomAdjacent()
@@ -87,12 +110,12 @@ class Branch
     yPos = constrain(yPos,0,height);
   }
   
-  void NewDirection()
+  void NewLineDirection()
   {
-    float r = int(random(-2,2));
+    float r = random(-2,2);
     xDirection = r;
     
-    r = int(random(-2,2));
+    r = random(-2,2);
     yDirection = r;
   }
   
@@ -104,10 +127,34 @@ class Branch
     yPos = constrain(yPos,0,height);
   }
   
+  void NewCurveDirection()
+  {
+    xDirection = 0;
+    yDirection = 0;
+    xCurveDirection = random(-0.2,0.2);
+    yCurveDirection = random(-0.2,0.2);
+    println("x curve direction = " + xCurveDirection);
+    println("y curve direction = " + yCurveDirection);
+  }
+  
+  void MoveAlongCurve()
+  {
+    //float r = random(-0.4,0.4);
+    xDirection += xCurveDirection;
+    xDirection = constrain(xDirection,-1,1);
+    //r = random(-0.4,0.4);
+    yDirection += yCurveDirection;
+    yDirection = constrain(yDirection,-1,1);
+    xPos += xDirection;
+    xPos = constrain(xPos,0,width);
+    yPos += yDirection;
+    yPos = constrain(yPos,0,height);
+  }
+  
   void ChooseSize()
   {
     size += int(random(-2,2));
-    size = constrain(size,1,10);
+    size = constrain(size,1,5);
   }
   
   void ChooseColour()
@@ -191,11 +238,13 @@ class Branch
     if(Likelihood(0.0002) && branches.size() < 10)
     {
       newBranches.add(new Branch(xPos, yPos, hue, saturation, brightness));
+      println("branch grown");
     }
     
-    if()
+    if(Likelihood(0.0002) && branches.size() > 1)
     {
-      
+      deadBranches.add(this);
+      println("branch died");
     }
   }
   
