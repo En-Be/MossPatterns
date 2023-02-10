@@ -1,6 +1,6 @@
 
 ArrayList<Branch> branches;
-
+ArrayList<Branch> newBranches;
 void setup()
 {
   size(1080/2,1920/2); 
@@ -9,9 +9,8 @@ void setup()
   background(0);
   
   branches = new ArrayList<Branch>();
-  branches.add(new Branch(width/2,height/2,255));
-  //branches.add(new Branch(width/4,height/4));
-  //branches.add(new Branch(int(width*0.6),int(height*0.6)));
+  branches.add(new Branch(width/2, height/2, 0, 0, 255));
+  newBranches = new ArrayList<Branch>();
 
 }
 
@@ -41,7 +40,10 @@ void draw()
     b.Update();
   }
   
-  //println("branches = " + branches.size());
+  branches.addAll(newBranches);
+  newBranches = new ArrayList<Branch>();
+  
+  println("branches = " + branches.size());
   println("framerate = " + frameRate);
   println("----");
 }

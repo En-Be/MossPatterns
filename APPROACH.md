@@ -27,3 +27,18 @@ Done
 - Checked if x and y position have decimals, they do
 
 ---
+
+## Session 03
+
+Minutes: 55
+
+TODO
+- Change line directions to work with decimals
+- Add size variation
+- Add grow function
+
+DONE
+- Line directions work with decimals, lines not contrained to right angles
+- Constrained lines back to 45 degree intervals, looks better
+- Added likelihood weighting for different move modes
+- Branches have a chance to clone themselves

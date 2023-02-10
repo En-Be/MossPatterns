@@ -6,9 +6,11 @@ class Branch
   int moveMode;
   int xPos;
   int yPos;
-  int xDirection;
-  int yDirection;
+  float xDirection;
+  float yDirection;
+  
   int size;
+  int sizeVariation;
   
   int colourMode;
   int hue;
@@ -18,7 +20,7 @@ class Branch
   
   //float[] likelihoods;
   
-  Branch(int x, int y, int c)
+  Branch(int x, int y, int h, int s, int b)
   {
     xOrigin = x;
     yOrigin = y;
@@ -29,39 +31,48 @@ class Branch
     size = 1;
     
     colourMode = 0;
-    hue = c;
-    saturation = c;
-    brightness = c;
+    hue = h;
+    saturation = s;
+    brightness = b;
     colourVariation = 3;
   }
   
   void Update()
   {
     Move();
+    ChooseSize();
     ChooseColour();
     Draw();
     DrawMirrored();
+    Grow();
   }
   
   void Move()
   {
-    if(Likelihood(0.001))
-    {
-      println("changeMode");
-      moveMode = int(random(2));
-      if(moveMode == 1)
-      {
-        NewDirection();
-      }
-    }
-    
     if(moveMode == 0)
     {
-      MoveRandomAdjacent();
+      if(Likelihood(0.002))
+      {
+        //println("changeMode");
+        moveMode = int(random(2));
+      }
+      else
+      {
+        MoveRandomAdjacent();
+      }
     }
     else if(moveMode == 1)
     {
-      MoveAlongLine();
+      if(Likelihood(0.01))
+      {
+        //println("changeMode");
+        moveMode = int(random(2));
+        NewDirection();
+      }
+      else
+      {
+        MoveAlongLine();
+      }
     }
   }
   
@@ -78,7 +89,7 @@ class Branch
   
   void NewDirection()
   {
-    int r = int(random(-2,2));
+    float r = int(random(-2,2));
     xDirection = r;
     
     r = int(random(-2,2));
@@ -88,7 +99,15 @@ class Branch
   void MoveAlongLine()
   {
     xPos += xDirection;
+    xPos = constrain(xPos,0,width);
     yPos += yDirection;
+    yPos = constrain(yPos,0,height);
+  }
+  
+  void ChooseSize()
+  {
+    size += int(random(-2,2));
+    size = constrain(size,1,10);
   }
   
   void ChooseColour()
@@ -111,14 +130,15 @@ class Branch
     {
       hue -= 255;
     }
+    
     saturation += int(random(colourVariation*-1,colourVariation));
     saturation = constrain(saturation,0,255);
     brightness += int(random(colourVariation*-1,colourVariation));
     brightness = constrain(brightness,0,255);
         
-    println("hue = " + hue);
-    println("saturation = " + saturation);
-    println("brightness = " + brightness);
+    //println("hue = " + hue);
+    //println("saturation = " + saturation);
+    //println("brightness = " + brightness);
   }
   
   void Draw()
@@ -131,8 +151,8 @@ class Branch
   void DrawMirrored()
   {
     // Local mirror
-    int xFlippedLocal = xOrigin-(xPos-xOrigin);
-    int yFlippedLocal = yOrigin-(yPos-yOrigin);
+    float xFlippedLocal = xOrigin-(xPos-xOrigin);
+    float yFlippedLocal = yOrigin-(yPos-yOrigin);
     
     ellipse(xFlippedLocal,yPos,size,size);
     ellipse(xPos,yFlippedLocal,size,size);
@@ -141,10 +161,10 @@ class Branch
     if(xOrigin != width/2 && yOrigin != height/2)
     {
       //Global mirror
-      int xFlippedGlobal1 = width/2-(xPos-width/2);
-      int yFlippedGlobal1 = height/2-(yPos-height/2);
-      int xFlippedGlobal2 = width/2-(xFlippedLocal-width/2);
-      int yFlippedGlobal2 = height/2-(yFlippedLocal-height/2);
+      float xFlippedGlobal1 = width/2-(xPos-width/2);
+      float yFlippedGlobal1 = height/2-(yPos-height/2);
+      float xFlippedGlobal2 = width/2-(xFlippedLocal-width/2);
+      float yFlippedGlobal2 = height/2-(yFlippedLocal-height/2);
      
       //global opposite x
       ellipse(xFlippedGlobal1,yPos,size,size);
@@ -166,10 +186,23 @@ class Branch
     }
   }
   
+  void Grow()
+  {
+    if(Likelihood(0.0002) && branches.size() < 10)
+    {
+      newBranches.add(new Branch(xPos, yPos, hue, saturation, brightness));
+    }
+    
+    if()
+    {
+      
+    }
+  }
+  
   boolean Likelihood(float f)
   {
     float r = random(1);
-    println("r = " + r);
+    //println("r = " + r);
     if(r >= 1 - f)
     {
       return true;
