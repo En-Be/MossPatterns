@@ -61,3 +61,15 @@ DONE
 - Curve move mode (need to change to rotation rather than decimals of position)
 
 ---
+
+## Session 05
+
+Minutes: 30
+
+TODO
+- Add likelihoods for a move mode to be chosen and to be exited
+
+DONE
+- Added likelihoods for move modes to be chosen and to be exited
+
+---

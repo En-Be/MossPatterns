@@ -20,7 +20,7 @@ class Branch
   int brightness;
   int colourVariation;
   
-  //float[] likelihoods;
+  float[] moveModeLikelihoods;
   
   Branch(float x, float y, int h, int s, int b)
   {
@@ -34,7 +34,6 @@ class Branch
     yDirection = 0;
     xCurveDirection = 0;
     yCurveDirection = 0;
-    //NewCurveDirection(); //test
 
     size = 1;
     
@@ -43,12 +42,16 @@ class Branch
     saturation = s;
     brightness = b;
     colourVariation = 3;
+    
+    moveModeLikelihoods = new float[3];
+    moveModeLikelihoods[0] = 0; // random
+    moveModeLikelihoods[1] = 0.8; // stright lines
+    moveModeLikelihoods[2] = 0.9; // curved lines
   }
   
   void Update()
   {
     Move();
-    //MoveAlongCurve();
     ChooseSize();
     ChooseColour();
     Draw();
@@ -60,10 +63,9 @@ class Branch
   {
     if(moveMode == 0) // Random walk
     {
-      if(Likelihood(0.001))
+      if(Likelihood(0.001))  // likelihood to change
       {
-        //println("changeMode");
-        moveMode = int(random(3));
+        ChooseMoveMode();
       }
       else
       {
@@ -72,11 +74,9 @@ class Branch
     }
     else if(moveMode == 1) // Straight lines
     {
-      if(Likelihood(0.01))
+      if(Likelihood(0.01))  // likelihood to change
       {
-        //println("changeMode");
-        moveMode = int(random(3));
-        NewLineDirection();
+        ChooseMoveMode();
       }
       else
       {
@@ -85,18 +85,37 @@ class Branch
     }
     else if(moveMode == 2) // Curved lines
     {
-      if(Likelihood(0.01))
+      if(Likelihood(0.01))  // likelihood to change
       {
-        //println("changeMode");
-        moveMode = int(random(3));
-        NewCurveDirection();
+        ChooseMoveMode();
       }
       else
       {
         MoveAlongCurve();
       }
     }
+    
     println("move mode = " + moveMode);
+  }
+  
+  void ChooseMoveMode()
+  {
+    float r = random(1);
+    
+    if(r > moveModeLikelihoods[2])
+    {
+      moveMode = 2;
+      NewCurveDirection();
+    }
+    else if(r > moveModeLikelihoods[1])
+    {
+      moveMode = 1;
+      NewLineDirection();
+    }
+    else
+    {
+      moveMode = 0;
+    }
   }
   
   void MoveRandomAdjacent()
@@ -251,7 +270,6 @@ class Branch
   boolean Likelihood(float f)
   {
     float r = random(1);
-    //println("r = " + r);
     if(r >= 1 - f)
     {
       return true;
@@ -263,215 +281,3 @@ class Branch
   }
 
 }
-
-//class Branch
-//{
-  
-//  int xStart;
-//  int yStart;
-//  int xPos;
-//  int yPos;
-  
-//  int walkMode;
-//  PVector direction;
-  
-//  int cR = 0;
-//  int cG = 0;
-//  int cB = 0;
-//  int cVari = 2;
-  
-//  int drawMode;
-//  int ellipseSize = 10;
-  
-//  int modeChangeChance = 9990;
-  
-//  Branch(int x, int y)
-//  {
-//    xStart = x;
-//    yStart = y;
-//    xPos = x;
-//    yPos = y;
-//    direction = new PVector(0,0);
-//    walkMode=0;
-//    drawMode=0;
-//  }
-  
-//  void Update()
-//  {
-//    Grow();
-//    ChooseColour();
-//    ChooseDrawMode();
-//    ChooseWalkMode();
-//    Walk();
-//    DrawMirrored(); 
-//  }
-  
-//  void Grow()
-//  {
-//    int r = int(random(100001));
-//    if(r > 99999 && branches.size() < 5)
-//    {
-//      branches.add(new Branch(xPos,yPos));
-//    }
-//  }  
-  
-//  void DrawMirrored()
-//  {
-//    int xFlipped = xStart*2-xPos;
-//    int yFlipped = yStart*2-yPos;
-    
-//    DrawLocalMirror(xFlipped,yFlipped);
-//    DrawGlobalMirror(xFlipped,yFlipped);
-//  }
-  
-//  void DrawMirroredRandomWalk()
-//  {
-//    RandomWalk();
-    
-//    int xFlipped = xStart*2-xPos;
-//    int yFlipped = yStart*2-yPos;
-    
-//    DrawLocalMirror(xFlipped,yFlipped);
-//    DrawGlobalMirror(xFlipped,yFlipped);
-//  }
-  
-//  void DrawLocalMirror(int x, int y)
-//  {  
-//    Draw(x,yPos);
-//    DrawGlobalMirror(x, yPos);
-    
-//    Draw(xPos,y);
-//    DrawGlobalMirror(xPos, y);
-    
-//    Draw(x,y);
-//    DrawGlobalMirror(x, y);
-    
-//    Draw(xPos,yPos);
-//    DrawGlobalMirror(xPos,yPos);
-//  }
-  
-//  void DrawGlobalMirror(int x, int y)
-//  {
-//    Draw(width-x,yPos);
-//    Draw(xPos,height-y);
-//    Draw(width-x,height-y);
-    
-//    Draw(width-xPos,y);
-//    Draw(xPos,height-yPos);
-//    Draw(width-xPos,height-yPos);
-    
-//    Draw(width-xPos,yPos);
-//    Draw(x, height-yPos);
-//    Draw(x, height-y);
-    
-//    Draw(width-x, y);
-//  }
-  
-//  void DrawRandomWalk()
-//  {
-//    RandomWalk();
-//    Draw(xPos,yPos);
-//  }
-  
-//  void RandomWalk()
-//  {
-//    xPos += ChooseRandomAdjacent();
-//    xPos = constrain(xPos,0,width);
-//    yPos += ChooseRandomAdjacent();
-//    yPos = constrain(yPos,0,height);
-//  }
-  
-//  void StraightWalk()
-//  {
-//    xPos += direction.x;
-//    xPos = constrain(xPos,0,width);
-//    yPos += direction.y;
-//    yPos = constrain(yPos,0,height);
-//  }
-  
-//  void NewStraightWalk()
-//  {
-//    int x = ChooseRandomAdjacent(3);
-//    int y = ChooseRandomAdjacent(3);
-//    direction = new PVector(x,y);
-//  }
-  
-//  void Walk()
-//  {
-//    if(walkMode == 1)
-//      {
-//        StraightWalk();
-//      }
-//      else
-//      {
-//        RandomWalk();
-//      }
-//  }
-  
-//  void ChooseWalkMode()
-//  {
-//    int r = int(random(10001));
-//    if(r>modeChangeChance)
-//    {
-//      int m = int(random(2));
-//      walkMode = m;
-      
-//      if(walkMode == 1)
-//      {
-//        NewStraightWalk();
-//        modeChangeChance = 9900;
-//      }
-//      else
-//      {
-//        modeChangeChance = 9990;
-//      }
-//    }
- 
-//  }
-  
-//  void ChooseDrawMode()
-//  {
-//    int r = int(random(10001));
-//    if(r > 9995)
-//    {
-//      drawMode = 1;
-//      ellipseSize = int(random(16,32));
-//    }
-//    else
-//    {
-//      drawMode = 0;
-//    }
-//  }
-  
-//  void Draw(int x, int y)
-//  {
-//    noStroke();
-//    rectMode(CORNER);
-//    fill(cR,cB,cG);
-//    if(drawMode == 1)
-//    {
-//      ellipseMode(CENTER);
-//      ellipse(x,y,ellipseSize,ellipseSize);
-//    }
-//    else
-//    {
-//      //rect(x,y,res,res);
-//    }
-//  }
-  
-//  void ChooseColour()
-//  {
-//    cR += int(random(cVari*-1,cVari));
-//    cR = constrain(cR,0,255);
-//    cG += int(random(cVari*-1,cVari));
-//    cG = constrain(cG,0,255);
-//    cB += int(random(cVari*-1,cVari));
-//    cB = constrain(cB,0,255);
-//  }
-  
-//  int ChooseRandomAdjacent()
-//  {
-//    int rand = int(random(-1,1));
-//    return rand;
-//  }
-//}
