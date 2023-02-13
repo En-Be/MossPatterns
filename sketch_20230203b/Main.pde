@@ -1,3 +1,7 @@
+int d;
+int h;
+int m;
+int s;
 
 ArrayList<Branch> branches;
 ArrayList<Branch> newBranches;
@@ -17,21 +21,22 @@ void setup()
   fullScreen();
   
   colorMode(HSB);
-  tone = 0;
+  tone = 255; // start black(0) or white(255)
   background(tone);
   
   framesPerSecond = 24;
   frameRate(framesPerSecond);
-  secondsToRecord = 10;
+  secondsToRecord = 20;
   
   speed = 100;
-  recording = true;
+  recording = false; // exports png frames to the sketch folder
 
   branches = new ArrayList<Branch>();
-  branches.add(new Branch(width/2, height/2, tone, tone, tone, 1));
+  branches.add(new Branch(width/2, height/2, tone, tone, tone, 1)); // final parameter sets color mode (0 = random, 1 = stepped)
   newBranches = new ArrayList<Branch>();
   deadBranches = new ArrayList<Branch>();
   
+  SetTiming();
 }
 
 void draw()
@@ -64,6 +69,37 @@ void draw()
       exit(); 
     }
   }
-  
+  else
+  {
+    UpdateTiming();
+  }
+}
 
+void SetTiming()
+{
+  d = day();
+  h = hour();
+  m = minute();
+  s = second();
+}
+
+void UpdateTiming()
+{
+  if(m != minute())
+  {
+    saveFrame("MossPattern-####.png");
+    Reset();
+    SetTiming();
+  }
+}
+
+void Reset()
+{
+  newBranches = new ArrayList<Branch>();
+  branches = new ArrayList<Branch>();
+  deadBranches = new ArrayList<Branch>();
+  noStroke();
+  fill(tone);
+  rect(0,0,width,height);
+  branches.add(new Branch(width/2, height/2, tone, tone, tone, 1)); // final parameter sets color mode (0 = random, 1 = stepped)
 }

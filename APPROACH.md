@@ -114,5 +114,15 @@ DONE
 
 ---
 
+## Session 09
+
+Minutes: 30
+
+TODO
 - reset by time (every 24hrs, start at 7am)
 - return to phone, install as wallpaper
+
+DONE
+- Saves a still every minute and then resets
+- Will transfer to phone and change settings there for reset every day as live wallpaper
+
