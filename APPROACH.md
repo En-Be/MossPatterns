@@ -73,3 +73,21 @@ DONE
 - Added likelihoods for move modes to be chosen and to be exited
 
 ---
+
+## Session 06
+
+Minutes: 30
+
+TODO
+- Occasional big circles
+
+
+DONE
+- Occasional big circles
+
+---
+
+- Stepped colour mode
+- Test acceleration on framerate, export video/stills
+- reset by time (every 24hrs, start at 7am)
+- return to phone, install as wallpaper

@@ -11,8 +11,10 @@ class Branch
   float xCurveDirection;
   float yCurveDirection;
   
-  int size;
-  int sizeVariation;
+  float size;
+  int sizeMode;
+  float sizeVariation;
+  float sizeMax;
   
   int colourMode;
   int hue;
@@ -34,8 +36,15 @@ class Branch
     yDirection = 0;
     xCurveDirection = 0;
     yCurveDirection = 0;
-
+    moveModeLikelihoods = new float[3];
+    moveModeLikelihoods[0] = 0; // random
+    moveModeLikelihoods[1] = 0.8; // stright lines
+    moveModeLikelihoods[2] = 0.9; // curved lines
+    
     size = 1;
+    sizeMode = 0;
+    sizeVariation = 1;
+    sizeMax = 1;
     
     colourMode = 0;
     hue = h;
@@ -43,10 +52,7 @@ class Branch
     brightness = b;
     colourVariation = 3;
     
-    moveModeLikelihoods = new float[3];
-    moveModeLikelihoods[0] = 0; // random
-    moveModeLikelihoods[1] = 0.8; // stright lines
-    moveModeLikelihoods[2] = 0.9; // curved lines
+
   }
   
   void Update()
@@ -172,13 +178,40 @@ class Branch
   
   void ChooseSize()
   {
-    size += int(random(-2,2));
-    size = constrain(size,1,5);
+    println("size = " + size);
+    if(sizeMode == 1)
+    {
+      size += sizeVariation;
+      if(size > random(50))
+      {
+        sizeVariation = -0.2;
+      }
+      else if(size < 1)
+      {
+        sizeMode = 0;
+        sizeMax = 4;
+      }    
+    }
+    else if(sizeMode == 0)
+    {
+      size += int(random(-2,2));
+      size = constrain(size,1,sizeMax);
+      if(Likelihood(0.0004))
+      {
+        sizeVariation = 0.2;
+        sizeMode = 1;
+        sizeMax = random(50);
+      }
+    }
   }
   
   void ChooseColour()
   {
-    if(colourMode == 0)
+    if(colourMode == 1)
+    {
+      
+    }
+    else if(colourMode == 0)
     {
       VaryColour();
     }
@@ -187,7 +220,6 @@ class Branch
   void VaryColour()
   {
     hue += int(random(colourVariation*-1,colourVariation));
-    //hue = constrain(hue,0,255);
     if(hue < 0)
     {
       hue += 255;
