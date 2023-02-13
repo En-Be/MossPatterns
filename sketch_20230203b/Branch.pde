@@ -24,7 +24,7 @@ class Branch
   
   float[] moveModeLikelihoods;
   
-  Branch(float x, float y, int h, int s, int b)
+  Branch(float x, float y, int h, int s, int b, int cm)
   {
     xOrigin = x;
     yOrigin = y;
@@ -46,13 +46,11 @@ class Branch
     sizeVariation = 1;
     sizeMax = 1;
     
-    colourMode = 0;
+    colourMode = cm;
     hue = h;
     saturation = s;
     brightness = b;
     colourVariation = 3;
-    
-
   }
   
   void Update()
@@ -178,11 +176,14 @@ class Branch
   
   void ChooseSize()
   {
+    println("size mode  = " + sizeMode);
     println("size = " + size);
+    println("size max = " + sizeMax);
     if(sizeMode == 1)
     {
       size += sizeVariation;
-      if(size > random(50))
+      
+      if(size > sizeMax)
       {
         sizeVariation = -0.2;
       }
@@ -199,22 +200,38 @@ class Branch
       if(Likelihood(0.0004))
       {
         sizeVariation = 0.2;
-        sizeMode = 1;
         sizeMax = random(50);
+        sizeMode = 1;
       }
     }
   }
   
   void ChooseColour()
   {
+    println("colour mode = " + colourMode);
+    
+    println("hue = " + hue);
+    println("saturation = " + saturation);
+    println("brightness = " + brightness);
+    
     if(colourMode == 1)
     {
-      
+      saturation = 100;
+      if(Likelihood(0.01))
+      {
+        StepColour();
+      }
     }
     else if(colourMode == 0)
     {
       VaryColour();
     }
+  }
+  
+  void StepColour()
+  {
+    brightness += int(random(-2,2))*25; 
+    brightness = constrain(brightness, 25, 255);
   }
   
   void VaryColour()
@@ -233,10 +250,6 @@ class Branch
     saturation = constrain(saturation,0,255);
     brightness += int(random(colourVariation*-1,colourVariation));
     brightness = constrain(brightness,0,255);
-        
-    //println("hue = " + hue);
-    //println("saturation = " + saturation);
-    //println("brightness = " + brightness);
   }
   
   void Draw()
@@ -288,7 +301,12 @@ class Branch
   {
     if(Likelihood(0.0002) && branches.size() < 10)
     {
-      newBranches.add(new Branch(xPos, yPos, hue, saturation, brightness));
+      int h = hue;
+      if(colourMode == 1)
+      {
+        h += int(random(-25,25));
+      }
+      newBranches.add(new Branch(xPos, yPos, h, saturation, brightness, colourMode));
       println("branch grown");
     }
     

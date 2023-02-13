@@ -11,7 +11,7 @@ void setup()
   background(0);
   
   branches = new ArrayList<Branch>();
-  branches.add(new Branch(width/2, height/2, 0, 0, 255));
+  branches.add(new Branch(width/2, height/2, int(random(255)), 0, 0, 1));
   newBranches = new ArrayList<Branch>();
   deadBranches = new ArrayList<Branch>();
 }

@@ -87,7 +87,18 @@ DONE
 
 ---
 
+## Session 07
+
+Minutes: 11.20 - 
+
+TODO
 - Stepped colour mode
+
+DONE
+- Stepped colour mode (set with first branch parameters and persists)
+
+---
+
 - Test acceleration on framerate, export video/stills
 - reset by time (every 24hrs, start at 7am)
 - return to phone, install as wallpaper
