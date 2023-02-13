@@ -51,6 +51,12 @@ class Branch
     saturation = s;
     brightness = b;
     colourVariation = 3;
+    
+    if(colourMode == 1)
+    {
+      hue += int(random(-2,2))*25;
+      HueCycle();
+    }
   }
   
   void Update()
@@ -99,7 +105,7 @@ class Branch
       }
     }
     
-    println("move mode = " + moveMode);
+    //println("move mode = " + moveMode);
   }
   
   void ChooseMoveMode()
@@ -156,8 +162,8 @@ class Branch
     yDirection = 0;
     xCurveDirection = random(-0.2,0.2);
     yCurveDirection = random(-0.2,0.2);
-    println("x curve direction = " + xCurveDirection);
-    println("y curve direction = " + yCurveDirection);
+    //println("x curve direction = " + xCurveDirection);
+    //println("y curve direction = " + yCurveDirection);
   }
   
   void MoveAlongCurve()
@@ -176,9 +182,9 @@ class Branch
   
   void ChooseSize()
   {
-    println("size mode  = " + sizeMode);
-    println("size = " + size);
-    println("size max = " + sizeMax);
+    //println("size mode  = " + sizeMode);
+    //println("size = " + size);
+    //println("size max = " + sizeMax);
     if(sizeMode == 1)
     {
       size += sizeVariation;
@@ -197,7 +203,7 @@ class Branch
     {
       size += int(random(-2,2));
       size = constrain(size,1,sizeMax);
-      if(Likelihood(0.0004))
+      if(Likelihood(0.0002))
       {
         sizeVariation = 0.2;
         sizeMax = random(50);
@@ -208,15 +214,15 @@ class Branch
   
   void ChooseColour()
   {
-    println("colour mode = " + colourMode);
+    //println("colour mode = " + colourMode);
     
-    println("hue = " + hue);
-    println("saturation = " + saturation);
-    println("brightness = " + brightness);
+    //println("hue = " + hue);
+    //println("saturation = " + saturation);
+    //println("brightness = " + brightness);
     
     if(colourMode == 1)
     {
-      saturation = 100;
+      saturation = 50;
       if(Likelihood(0.01))
       {
         StepColour();
@@ -237,6 +243,23 @@ class Branch
   void VaryColour()
   {
     hue += int(random(colourVariation*-1,colourVariation));
+    //if(hue < 0)
+    //{
+    //  hue += 255;
+    //}
+    //else if(hue > 255)
+    //{
+    //  hue -= 255;
+    //}
+    HueCycle();
+    saturation += int(random(colourVariation*-1,colourVariation));
+    saturation = constrain(saturation,0,255);
+    brightness += int(random(colourVariation*-1,colourVariation));
+    brightness = constrain(brightness,0,255);
+  }
+  
+  void HueCycle()
+  {
     if(hue < 0)
     {
       hue += 255;
@@ -245,11 +268,6 @@ class Branch
     {
       hue -= 255;
     }
-    
-    saturation += int(random(colourVariation*-1,colourVariation));
-    saturation = constrain(saturation,0,255);
-    brightness += int(random(colourVariation*-1,colourVariation));
-    brightness = constrain(brightness,0,255);
   }
   
   void Draw()
@@ -304,16 +322,16 @@ class Branch
       int h = hue;
       if(colourMode == 1)
       {
-        h += int(random(-25,25));
+        //h += int(random(-25,25));
       }
       newBranches.add(new Branch(xPos, yPos, h, saturation, brightness, colourMode));
-      println("branch grown");
+      //println("branch grown");
     }
     
     if(Likelihood(0.0002) && branches.size() > 1)
     {
       deadBranches.add(this);
-      println("branch died");
+      //println("branch died");
     }
   }
   

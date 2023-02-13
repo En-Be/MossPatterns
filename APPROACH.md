@@ -89,7 +89,7 @@ DONE
 
 ## Session 07
 
-Minutes: 11.20 - 
+Minutes: 30
 
 TODO
 - Stepped colour mode
@@ -99,6 +99,20 @@ DONE
 
 ---
 
+## Session 08
+
+Minutes: 45
+
+TODO
 - Test acceleration on framerate, export video/stills
+
+DONE
+- Accelerated generation works on laptop
+- Fixed branch hue randomisation
+- Specified frame rate and number of seconds to record
+- Stills exported when recording set to true
+
+---
+
 - reset by time (every 24hrs, start at 7am)
 - return to phone, install as wallpaper
