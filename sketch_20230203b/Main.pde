@@ -85,7 +85,7 @@ void SetTiming()
 
 void UpdateTiming()
 {
-  if(m != minute())
+  if(d != day())
   {
     saveFrame("MossPattern-####.png");
     Reset();

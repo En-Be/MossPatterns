@@ -126,3 +126,21 @@ DONE
 - Saves a still every minute and then resets
 - Will transfer to phone and change settings there for reset every day as live wallpaper
 
+---
+
+## Session 10
+
+Minutes: 30
+
+TODO
+- Install on phone as wallpaper
+- Add tone setting to start light or dark
+
+DONE
+- Install on phone as wallpaper
+- Add tone setting to start light or dark
+
+---
+
+TODO
+- Branch parameters collected in colour modes
