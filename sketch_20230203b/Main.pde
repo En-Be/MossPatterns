@@ -7,6 +7,8 @@ ArrayList<Branch> branches;
 ArrayList<Branch> newBranches;
 ArrayList<Branch> deadBranches;
 
+Profile currentProfile;
+
 int speed;
 int framesPerSecond;
 int secondsToRecord;
@@ -17,11 +19,11 @@ boolean recording;
 
 void setup()
 {
-  //size(1080/2,1920/2); 
-  fullScreen();
+  size(1080/2,1920/2); 
+  //fullScreen();
   
   colorMode(HSB);
-  tone = 255; // start black(0) or white(255)
+  tone = 0; // start black(0) or white(255)
   background(tone);
   
   framesPerSecond = 24;
@@ -31,11 +33,13 @@ void setup()
   speed = 100;
   recording = false; // exports png frames to the sketch folder
 
+  currentProfile = new Profile(false, false, 0,0,int(random(305,305)),0,0,0,0,0,0,0,0);
+
   branches = new ArrayList<Branch>();
-  branches.add(new Branch(width/2, height/2, tone, tone, tone, 1)); // final parameter sets color mode (0 = random, 1 = stepped)
+  branches.add(new Branch(width/2, height/2, tone, 1)); // final parameter sets color mode (0 = random, 1 = stepped)
   newBranches = new ArrayList<Branch>();
   deadBranches = new ArrayList<Branch>();
-  
+
   SetTiming();
 }
 
@@ -66,7 +70,7 @@ void draw()
     saveFrame("MossPattern-####.png");
     if(frameCount >= framesPerSecond*secondsToRecord)
     {
-      exit(); 
+      //exit(); 
     }
   }
   else
@@ -85,7 +89,7 @@ void SetTiming()
 
 void UpdateTiming()
 {
-  if(d != day())
+  if(m != minute())
   {
     saveFrame("MossPattern-####.png");
     Reset();
@@ -101,5 +105,5 @@ void Reset()
   noStroke();
   fill(tone);
   rect(0,0,width,height);
-  branches.add(new Branch(width/2, height/2, tone, tone, tone, 1)); // final parameter sets color mode (0 = random, 1 = stepped)
+  branches.add(new Branch(width/2, height/2, tone, 1)); // final parameter sets color mode (0 = random, 1 = stepped)
 }

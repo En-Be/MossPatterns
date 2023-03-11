@@ -142,5 +142,15 @@ DONE
 
 ---
 
+## Session 11
+
+Minutes: 60
+
 TODO
 - Branch parameters collected in colour modes
+
+DONE
+- Profile class with colour parameters
+- Branch checks current profile for random at branch and hue
+
+---

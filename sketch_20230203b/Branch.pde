@@ -24,7 +24,7 @@ class Branch
   
   float[] moveModeLikelihoods;
   
-  Branch(float x, float y, int h, int s, int b, int cm)
+  Branch(float x, float y, int t, int cm)
   {
     xOrigin = x;
     yOrigin = y;
@@ -47,16 +47,31 @@ class Branch
     sizeMax = 1;
     
     colourMode = cm;
-    hue = h;
-    saturation = s;
-    brightness = b;
-    colourVariation = 3;
+    hue = t;
+    saturation = t;
+    brightness = t;
+    colourVariation = 10;
     
-    if(colourMode == 1)
+    if(currentProfile.RandomAtBranch())
     {
-      hue += int(random(-2,2))*25;
+      hue = int(random(255));
+    }
+    else
+    {
+      hue = currentProfile.Hue();
+      hue += int(random(-2,2))*colourVariation;
       HueCycle();
     }
+    
+    //if(colourMode == 1)
+    //{
+    //  hue += int(random(-2,2))*colourVariation;
+    //  HueCycle();
+    //}
+    //else
+    //{
+    //  hue = int(random(255));
+    //}
   }
   
   void Update()
@@ -67,6 +82,8 @@ class Branch
     Draw();
     DrawMirrored();
     Grow();
+    //text(20,20,hue);
+    //println("current hue = " + hue);
   }
   
   void Move()
@@ -222,7 +239,7 @@ class Branch
     
     if(colourMode == 1)
     {
-      saturation = 50;
+      saturation = 200;
       if(Likelihood(0.01))
       {
         StepColour();
@@ -237,7 +254,7 @@ class Branch
   void StepColour()
   {
     brightness += int(random(-2,2))*25; 
-    brightness = constrain(brightness, 25, 255);
+    brightness = constrain(brightness, 0, 150);
   }
   
   void VaryColour()
@@ -253,9 +270,9 @@ class Branch
     //}
     HueCycle();
     saturation += int(random(colourVariation*-1,colourVariation));
-    saturation = constrain(saturation,0,255);
+    saturation = constrain(saturation,200,255);
     brightness += int(random(colourVariation*-1,colourVariation));
-    brightness = constrain(brightness,0,255);
+    brightness = constrain(brightness,0,10);
   }
   
   void HueCycle()
@@ -324,7 +341,7 @@ class Branch
       {
         //h += int(random(-25,25));
       }
-      newBranches.add(new Branch(xPos, yPos, h, saturation, brightness, colourMode));
+      newBranches.add(new Branch(xPos, yPos, tone, colourMode));
       //println("branch grown");
     }
     
