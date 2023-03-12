@@ -1,35 +1,42 @@
 class Profile
 {
   boolean randomAtBranch;
-  boolean stepped;
   int stepSize;
   
   int background;
   
+  float hueChance;
   int hue;
   int hueMin;
   int hueMax;
   
+  float saturationChance;
   int saturation;
   int saturationMin;
   int saturationMax;
   
+  float brightnessChance;
   int brightness;
   int brightnessMin;
   int brightnessMax;
   
-  Profile(boolean rAB, boolean s, int sS, int bG, int h, int hMin, int hMax, int sat, int sMin, int sMax, int bri, int briMin, int briMax)
+  Profile(boolean rAB, int sS, int bG, float cC, int h, int hMin, int hMax, float satC, int sat, int sMin, int sMax, float briC, int bri, int briMin, int briMax)
   {
     randomAtBranch = rAB;
-    stepped = s;
     stepSize = sS;
     background = bG;
+    
+    hueChance = cC;
     hue = h;
     hueMin = hMin;
     hueMax = hMax;
+    
+    saturationChance = satC;
     saturation = sat;
     saturationMin = sMin;
     saturationMax = sMax;
+    
+    brightnessChance = briC;
     brightness = bri;
     brightnessMin = briMin;
     brightnessMax = briMax;
@@ -40,6 +47,21 @@ class Profile
     return randomAtBranch;  
   }
   
+  int StepSize()
+  {
+    return stepSize;
+  }
+  
+  int Background()
+  {
+    return background;
+  }
+  
+  float HueChance()
+  {
+    return hueChance;
+  }
+  
   void Hue(int h)
   {
     hue = h;
@@ -48,6 +70,16 @@ class Profile
   int Hue()
   {
     return hue; 
+  }
+  
+  float SaturationChance()
+  {
+    return saturationChance; 
+  }
+  
+  float BrightnessChance()
+  {
+    return brightnessChance; 
   }
 }
 

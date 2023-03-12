@@ -16,7 +16,6 @@ class Branch
   float sizeVariation;
   float sizeMax;
   
-  int colourMode;
   int hue;
   int saturation;
   int brightness;
@@ -24,7 +23,7 @@ class Branch
   
   float[] moveModeLikelihoods;
   
-  Branch(float x, float y, int t, int cm)
+  Branch(float x, float y, int t)
   {
     xOrigin = x;
     yOrigin = y;
@@ -46,8 +45,8 @@ class Branch
     sizeVariation = 1;
     sizeMax = 1;
     
-    colourMode = cm;
-    hue = t;
+    //colourMode = cm;
+    //hue = t;
     saturation = t;
     brightness = t;
     colourVariation = 10;
@@ -59,8 +58,8 @@ class Branch
     else
     {
       hue = currentProfile.Hue();
-      hue += int(random(-2,2))*colourVariation;
-      HueCycle();
+      //hue += int(random(-2,2))*colourVariation;
+      //HueCycle();
     }
     
     //if(colourMode == 1)
@@ -78,7 +77,7 @@ class Branch
   {
     Move();
     ChooseSize();
-    ChooseColour();
+    ChangeColour();
     Draw();
     DrawMirrored();
     Grow();
@@ -229,50 +228,25 @@ class Branch
     }
   }
   
-  void ChooseColour()
+  void ChangeColour()
   {
-    //println("colour mode = " + colourMode);
-    
-    //println("hue = " + hue);
-    //println("saturation = " + saturation);
-    //println("brightness = " + brightness);
-    
-    if(colourMode == 1)
+    if(Likelihood(currentProfile.HueChance()))
     {
-      saturation = 200;
-      if(Likelihood(0.01))
-      {
-        StepColour();
-      }
+      hue += int(random(-2,2))*currentProfile.StepSize();
+      HueCycle();
     }
-    else if(colourMode == 0)
+    
+    if(Likelihood(currentProfile.SaturationChance()))
     {
-      VaryColour();
+      saturation += int(random(-2,2))*currentProfile.StepSize();
+      saturation = constrain(saturation,0,255);
     }
-  }
-  
-  void StepColour()
-  {
-    brightness += int(random(-2,2))*25; 
-    brightness = constrain(brightness, 0, 150);
-  }
-  
-  void VaryColour()
-  {
-    hue += int(random(colourVariation*-1,colourVariation));
-    //if(hue < 0)
-    //{
-    //  hue += 255;
-    //}
-    //else if(hue > 255)
-    //{
-    //  hue -= 255;
-    //}
-    HueCycle();
-    saturation += int(random(colourVariation*-1,colourVariation));
-    saturation = constrain(saturation,200,255);
-    brightness += int(random(colourVariation*-1,colourVariation));
-    brightness = constrain(brightness,0,10);
+    
+    if(Likelihood(currentProfile.BrightnessChance()))
+    {
+      brightness += int(random(-2,2))*currentProfile.StepSize();
+      brightness = constrain(brightness,0,255);
+    } 
   }
   
   void HueCycle()
@@ -336,12 +310,15 @@ class Branch
   {
     if(Likelihood(0.0002) && branches.size() < 10)
     {
-      int h = hue;
-      if(colourMode == 1)
+      if(currentProfile.RandomAtBranch())
       {
-        //h += int(random(-25,25));
+        currentProfile.Hue(int(random(0,255)));
       }
-      newBranches.add(new Branch(xPos, yPos, tone, colourMode));
+      else
+      {
+        currentProfile.Hue(hue);
+      }
+      newBranches.add(new Branch(xPos, yPos, currentProfile.Hue()));
       //println("branch grown");
     }
     

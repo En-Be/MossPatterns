@@ -154,3 +154,15 @@ DONE
 - Branch checks current profile for random at branch and hue
 
 ---
+
+## Session 012
+
+Minutes: 60
+
+TODO
+- Branch parameters to colour profile
+
+DONE
+- More parameters moved to profile
+
+---

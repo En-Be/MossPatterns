@@ -13,8 +13,6 @@ int speed;
 int framesPerSecond;
 int secondsToRecord;
 
-int tone;
-
 boolean recording;
 
 void setup()
@@ -23,8 +21,6 @@ void setup()
   //fullScreen();
   
   colorMode(HSB);
-  tone = 0; // start black(0) or white(255)
-  background(tone);
   
   framesPerSecond = 24;
   frameRate(framesPerSecond);
@@ -33,14 +29,10 @@ void setup()
   speed = 100;
   recording = false; // exports png frames to the sketch folder
 
-  currentProfile = new Profile(false, false, 0,0,int(random(305,305)),0,0,0,0,0,0,0,0);
+  //currentProfile = new Profile(false,1,255,0.1f,int(random(0,255)),0,0,0,0,0,0,0,0);
 
   branches = new ArrayList<Branch>();
-  branches.add(new Branch(width/2, height/2, tone, 1)); // final parameter sets color mode (0 = random, 1 = stepped)
-  newBranches = new ArrayList<Branch>();
-  deadBranches = new ArrayList<Branch>();
-
-  SetTiming();
+  Reset();
 }
 
 void draw()
@@ -63,6 +55,7 @@ void draw()
   }
   println("branches = " + branches.size());
   println("framerate = " + frameRate);
+  println("current hue = " + currentProfile.Hue());
   println("----");
   
   if(recording)
@@ -99,11 +92,30 @@ void UpdateTiming()
 
 void Reset()
 {
+  currentProfile = new Profile
+  (
+    true, //randomAtBranch
+    5, //stepSize
+    255, //background
+    0.001f, //hueChance
+    int(random(0,255)), //hue
+    0, //hueMin
+    0, //hueMax
+    0.001f, //saturationChance
+    0, //saturation
+    0, //saturationMin
+    0, //saturationMax
+    0.001f, //brightnessChance
+    0, //brightness
+    0, //brightnessMin
+    0 //brightnessMax
+  );
+
   newBranches = new ArrayList<Branch>();
   branches = new ArrayList<Branch>();
   deadBranches = new ArrayList<Branch>();
   noStroke();
-  fill(tone);
+  fill(currentProfile.Background());
   rect(0,0,width,height);
-  branches.add(new Branch(width/2, height/2, tone, 1)); // final parameter sets color mode (0 = random, 1 = stepped)
+  branches.add(new Branch(width/2, height/2, currentProfile.Background())); // final parameter sets color mode (0 = random, 1 = stepped)
 }
