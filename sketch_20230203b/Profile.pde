@@ -1,6 +1,7 @@
 class Profile
 {
   boolean randomAtBranch;
+  boolean driftAtBranch;
   int stepSize;
   
   int background;
@@ -20,9 +21,10 @@ class Profile
   int brightnessMin;
   int brightnessMax;
   
-  Profile(boolean rAB, int sS, int bG, float cC, int h, int hMin, int hMax, float satC, int sat, int sMin, int sMax, float briC, int bri, int briMin, int briMax)
+  Profile(boolean rAB, boolean dAB, int sS, int bG, float cC, int h, int hMin, int hMax, float satC, int sat, int sMin, int sMax, float briC, int bri, int briMin, int briMax)
   {
     randomAtBranch = rAB;
+    driftAtBranch = dAB;
     stepSize = sS;
     background = bG;
     
@@ -45,6 +47,11 @@ class Profile
   boolean RandomAtBranch()
   {
     return randomAtBranch;  
+  }
+  
+  boolean DriftAtBranch()
+  {
+    return driftAtBranch;
   }
   
   int StepSize()
@@ -77,10 +84,51 @@ class Profile
     return saturationChance; 
   }
   
+  int Saturation()
+  {
+    return saturation;
+  }
+  
+  void Saturation(int s)
+  {
+    saturation = s;
+  }
+  
+  int SaturationMin()
+  {
+    return saturationMin;  
+  }
+  
+  int SaturationMax()
+  {
+    return saturationMax;  
+  }
+  
   float BrightnessChance()
   {
     return brightnessChance; 
   }
+  
+  int Brightness()
+  {
+    return brightness;
+  }
+  
+  void Brightness(int b)
+  {
+    brightness = b;
+  }
+  
+  int BrightnessMin()
+  {
+    return brightnessMin;  
+  }
+  
+  int BrightnessMax()
+  {
+    return brightnessMax;  
+  }
+  
 }
 
 /*

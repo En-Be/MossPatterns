@@ -166,3 +166,22 @@ DONE
 - More parameters moved to profile
 
 ---
+
+## Session 013
+
+Minutes: 60
+
+TODO
+- All colour parameters to profiles
+- List of preset profiles
+
+DONE
+- All colour parameters to profiles
+- List of preset profiles to choose from
+    - Dark and saturated, slight hue change
+        ![pic](/MossPattern-1754.png)
+    - Light and pastel, hue drift
+        ![pic](/MossPattern-2119.png)
+    - Frequent random
+        ![pic](/MossPattern-1162.png)
+

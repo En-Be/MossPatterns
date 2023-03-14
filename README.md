@@ -2,7 +2,7 @@
 
 A pattern generator inspired by woven rug art and embroidery
 
-![pic](/Recordings/4.gif)
+![pic](/4.gif)
 
 Phone version: a live wallpaper, slowly generating, that resets every 24hrs
 

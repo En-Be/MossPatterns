@@ -7,6 +7,8 @@ ArrayList<Branch> branches;
 ArrayList<Branch> newBranches;
 ArrayList<Branch> deadBranches;
 
+Profile[] presets;
+int presetToLoad;
 Profile currentProfile;
 
 int speed;
@@ -17,16 +19,18 @@ boolean recording;
 
 void setup()
 {
-  size(1080/2,1920/2); 
+  size(1080/2,1920/2);
+  //size(1920, 100);
   //fullScreen();
   
   colorMode(HSB);
+  presetToLoad = 2;
   
   framesPerSecond = 24;
   frameRate(framesPerSecond);
-  secondsToRecord = 20;
+  secondsToRecord = 10;
   
-  speed = 100;
+  speed = 20;
   recording = false; // exports png frames to the sketch folder
 
   //currentProfile = new Profile(false,1,255,0.1f,int(random(0,255)),0,0,0,0,0,0,0,0);
@@ -56,6 +60,7 @@ void draw()
   println("branches = " + branches.size());
   println("framerate = " + frameRate);
   println("current hue = " + currentProfile.Hue());
+  println("second = " + second());
   println("----");
   
   if(recording)
@@ -63,7 +68,7 @@ void draw()
     saveFrame("MossPattern-####.png");
     if(frameCount >= framesPerSecond*secondsToRecord)
     {
-      //exit(); 
+      exit(); 
     }
   }
   else
@@ -92,30 +97,16 @@ void UpdateTiming()
 
 void Reset()
 {
-  currentProfile = new Profile
-  (
-    true, //randomAtBranch
-    5, //stepSize
-    255, //background
-    0.001f, //hueChance
-    int(random(0,255)), //hue
-    0, //hueMin
-    0, //hueMax
-    0.001f, //saturationChance
-    0, //saturation
-    0, //saturationMin
-    0, //saturationMax
-    0.001f, //brightnessChance
-    0, //brightness
-    0, //brightnessMin
-    0 //brightnessMax
-  );
+  presets = Presets();
+  currentProfile = presets[presetToLoad];
 
   newBranches = new ArrayList<Branch>();
   branches = new ArrayList<Branch>();
   deadBranches = new ArrayList<Branch>();
+  
   noStroke();
   fill(currentProfile.Background());
   rect(0,0,width,height);
+  
   branches.add(new Branch(width/2, height/2, currentProfile.Background())); // final parameter sets color mode (0 = random, 1 = stepped)
 }

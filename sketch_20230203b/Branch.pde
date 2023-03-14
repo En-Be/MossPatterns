@@ -19,7 +19,6 @@ class Branch
   int hue;
   int saturation;
   int brightness;
-  int colourVariation;
   
   float[] moveModeLikelihoods;
   
@@ -47,9 +46,9 @@ class Branch
     
     //colourMode = cm;
     //hue = t;
-    saturation = t;
-    brightness = t;
-    colourVariation = 10;
+    saturation = currentProfile.Saturation();
+    brightness = currentProfile.Brightness();
+    //colourVariation = 10;
     
     if(currentProfile.RandomAtBranch())
     {
@@ -219,10 +218,10 @@ class Branch
     {
       size += int(random(-2,2));
       size = constrain(size,1,sizeMax);
-      if(Likelihood(0.0002))
+      if(Likelihood(0.00002))
       {
         sizeVariation = 0.2;
-        sizeMax = random(50);
+        sizeMax = random(200);
         sizeMode = 1;
       }
     }
@@ -239,13 +238,13 @@ class Branch
     if(Likelihood(currentProfile.SaturationChance()))
     {
       saturation += int(random(-2,2))*currentProfile.StepSize();
-      saturation = constrain(saturation,0,255);
+      saturation = constrain(saturation,currentProfile.SaturationMin(),currentProfile.SaturationMax());
     }
     
     if(Likelihood(currentProfile.BrightnessChance()))
     {
       brightness += int(random(-2,2))*currentProfile.StepSize();
-      brightness = constrain(brightness,0,255);
+      brightness = constrain(brightness,currentProfile.BrightnessMin(),currentProfile.BrightnessMax());
     } 
   }
   
@@ -308,16 +307,20 @@ class Branch
   
   void Grow()
   {
+    
     if(Likelihood(0.0002) && branches.size() < 10)
     {
       if(currentProfile.RandomAtBranch())
       {
         currentProfile.Hue(int(random(0,255)));
       }
-      else
+      else if(currentProfile.DriftAtBranch())
       {
         currentProfile.Hue(hue);
+        currentProfile.Saturation(saturation);
+        currentProfile.Brightness(brightness);
       }
+          
       newBranches.add(new Branch(xPos, yPos, currentProfile.Hue()));
       //println("branch grown");
     }
