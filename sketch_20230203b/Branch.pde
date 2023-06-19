@@ -221,7 +221,7 @@ class Branch
       if(Likelihood(0.00002))
       {
         sizeVariation = 0.2;
-        sizeMax = random(200);
+        sizeMax = random(100);
         sizeMode = 1;
       }
     }

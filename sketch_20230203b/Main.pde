@@ -19,18 +19,18 @@ boolean recording;
 
 void setup()
 {
-  size(1080/2,1920/2);
-  //size(1920, 100);
+  //size(1080/2,1920/2);
+  size(1080/2, 1080/2);
   //fullScreen();
   
   colorMode(HSB);
-  presetToLoad = 2;
+  presetToLoad = 1;
   
   framesPerSecond = 24;
   frameRate(framesPerSecond);
   secondsToRecord = 10;
   
-  speed = 20;
+  speed = int(random(0,40));
   recording = false; // exports png frames to the sketch folder
 
   //currentProfile = new Profile(false,1,255,0.1f,int(random(0,255)),0,0,0,0,0,0,0,0);
